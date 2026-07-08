@@ -31,6 +31,18 @@ describe('parseDiaryText', () => {
     ]);
   });
 
+  it('extracts kcal annotation from meal content', () => {
+    const result = parseDiaryText('11:00 #食事 昼食 パスタ (約800kcal)');
+    expect(result.meals).toEqual([
+      { mealType: '昼食', content: 'パスタ (約800kcal)', time: '11:00', kcal: 800 },
+    ]);
+  });
+
+  it('leaves kcal undefined when no annotation is present', () => {
+    const result = parseDiaryText('#食事 朝食 パンとコーヒー');
+    expect(result.meals[0].kcal).toBeUndefined();
+  });
+
   it('extracts exercise with duration', () => {
     const result = parseDiaryText('19:00 #運動 ランニング 30分');
     expect(result.exercises).toEqual([

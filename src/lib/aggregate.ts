@@ -13,6 +13,7 @@ export interface DailyStats {
   exerciseMin: DailyPoint[];
   phoneMin: DailyPoint[];
   mealCount: DailyPoint[];
+  calorieKcal: DailyPoint[];
 }
 
 export function buildDailyStats(entries: Record<string, DiaryEntry>, days: number): DailyStats {
@@ -26,6 +27,7 @@ export function buildDailyStats(entries: Record<string, DiaryEntry>, days: numbe
   const exerciseMin: DailyPoint[] = [];
   const phoneMin: DailyPoint[] = [];
   const mealCount: DailyPoint[] = [];
+  const calorieKcal: DailyPoint[] = [];
 
   for (const date of dates) {
     const entry = entries[date];
@@ -35,9 +37,10 @@ export function buildDailyStats(entries: Record<string, DiaryEntry>, days: numbe
     exerciseMin.push({ date, label, value: parsed.exercises.reduce((s, x) => s + (x.durationMin ?? 0), 0) });
     phoneMin.push({ date, label, value: parsed.phoneUsage.reduce((s, x) => s + (x.durationMin ?? 0), 0) });
     mealCount.push({ date, label, value: parsed.meals.length });
+    calorieKcal.push({ date, label, value: parsed.meals.reduce((s, x) => s + (x.kcal ?? 0), 0) });
   }
 
-  return { spending, exerciseMin, phoneMin, mealCount };
+  return { spending, exerciseMin, phoneMin, mealCount, calorieKcal };
 }
 
 export function sum(points: DailyPoint[]): number {

@@ -20,6 +20,7 @@ export function ParsedPreview({ data }: { data: ParsedDay }) {
   const totalSpending = data.spending.reduce((sum, s) => sum + s.amount, 0);
   const totalExercise = data.exercises.reduce((sum, e) => sum + (e.durationMin ?? 0), 0);
   const totalPhone = data.phoneUsage.reduce((sum, p) => sum + (p.durationMin ?? 0), 0);
+  const totalKcal = data.meals.reduce((sum, m) => sum + (m.kcal ?? 0), 0);
 
   return (
     <div className="parsed-preview">
@@ -37,7 +38,7 @@ export function ParsedPreview({ data }: { data: ParsedDay }) {
       )}
       {data.meals.length > 0 && (
         <section>
-          <h4>食事</h4>
+          <h4>食事{totalKcal > 0 && <span className="tag-total">計 約{totalKcal.toLocaleString()}kcal</span>}</h4>
           <ul>
             {data.meals.map((m, i) => (
               <li key={i}>
