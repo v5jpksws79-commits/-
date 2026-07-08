@@ -38,6 +38,7 @@ export function StatsView({ entries }: Props) {
         <StatTile label="運動合計" value={`${sum(stats.exerciseMin).toLocaleString()}分`} colorVar="--series-2" />
         <StatTile label="スマホ利用合計" value={`${sum(stats.phoneMin).toLocaleString()}分`} colorVar="--series-8" />
         <StatTile label="食事記録数" value={`${sum(stats.mealCount).toLocaleString()}件`} colorVar="--series-4" />
+        <StatTile label="摂取カロリー合計(目安)" value={`${sum(stats.calorieKcal).toLocaleString()}kcal`} colorVar="--series-3" />
       </div>
 
       <section className="chart-section">
@@ -53,6 +54,11 @@ export function StatsView({ entries }: Props) {
       <section className="chart-section">
         <h3>日別スマホ利用時間</h3>
         <BarChart data={stats.phoneMin} colorVar="--series-8" unit="分" />
+      </section>
+
+      <section className="chart-section">
+        <h3>日別摂取カロリー(目安)</h3>
+        <BarChart data={stats.calorieKcal} colorVar="--series-3" unit="kcal" />
       </section>
     </div>
   );

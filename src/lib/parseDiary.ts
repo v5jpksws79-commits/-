@@ -27,6 +27,12 @@ function extractDuration(payload: string): { durationMin?: number; rest: string 
   };
 }
 
+function extractKcal(payload: string): number | undefined {
+  const match = payload.match(/([0-9,]+)\s*kcal/i);
+  if (!match) return undefined;
+  return Number(match[1].replace(/,/g, ''));
+}
+
 export function parseDiaryText(text: string): ParsedDay {
   const spending: SpendingItem[] = [];
   const meals: MealItem[] = [];
@@ -78,7 +84,7 @@ export function parseDiaryText(text: string): ParsedDay {
           break;
         }
       }
-      meals.push({ mealType, content, time: timeMatch?.[1] });
+      meals.push({ mealType, content, time: timeMatch?.[1], kcal: extractKcal(content) });
     }
 
     if (line.includes('#運動')) {

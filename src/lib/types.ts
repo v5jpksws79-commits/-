@@ -15,6 +15,7 @@ export interface MealItem {
   mealType?: string;
   content: string;
   time?: string;
+  kcal?: number;
 }
 
 export interface ExerciseItem {
