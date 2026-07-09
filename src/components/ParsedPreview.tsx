@@ -11,7 +11,7 @@ export function ParsedPreview({ data }: { data: ParsedDay }) {
     data.meals.length === 0 &&
     data.exercises.length === 0 &&
     data.spending.length === 0 &&
-    data.phoneUsage.length === 0;
+    data.sleep.length === 0;
 
   if (isEmpty) {
     return <p className="parsed-empty">まだ抽出されたデータはありません。タグを使って書いてみましょう。</p>;
@@ -19,7 +19,7 @@ export function ParsedPreview({ data }: { data: ParsedDay }) {
 
   const totalSpending = data.spending.reduce((sum, s) => sum + s.amount, 0);
   const totalExercise = data.exercises.reduce((sum, e) => sum + (e.durationMin ?? 0), 0);
-  const totalPhone = data.phoneUsage.reduce((sum, p) => sum + (p.durationMin ?? 0), 0);
+  const totalSleep = data.sleep.reduce((sum, s) => sum + (s.hours ?? 0), 0);
   const totalKcal = data.meals.reduce((sum, m) => sum + (m.kcal ?? 0), 0);
 
   return (
@@ -31,6 +31,19 @@ export function ParsedPreview({ data }: { data: ParsedDay }) {
             {data.schedule.map((s, i) => (
               <li key={i}>
                 <span className="tag-time">{fmtTime(s)}</span> {s.content}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {data.sleep.length > 0 && (
+        <section>
+          <h4>睡眠 <span className="tag-total">計 {totalSleep}時間</span></h4>
+          <ul>
+            {data.sleep.map((s, i) => (
+              <li key={i}>
+                {s.time && <span className="tag-time">{s.time}</span>}
+                {s.hours != null && <span className="tag-badge">{s.hours}時間</span>}
               </li>
             ))}
           </ul>
@@ -71,19 +84,6 @@ export function ParsedPreview({ data }: { data: ParsedDay }) {
                 {s.time && <span className="tag-time">{s.time}</span>}
                 {s.category && <span className="tag-badge">{s.category}</span>}
                 {' '}{s.amount.toLocaleString()}円 {s.memo}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-      {data.phoneUsage.length > 0 && (
-        <section>
-          <h4>スマホ利用 <span className="tag-total">計 {totalPhone}分</span></h4>
-          <ul>
-            {data.phoneUsage.map((p, i) => (
-              <li key={i}>
-                {p.time && <span className="tag-time">{p.time}</span>} {p.app}
-                {p.durationMin != null && <span className="tag-badge">{p.durationMin}分</span>}
               </li>
             ))}
           </ul>
