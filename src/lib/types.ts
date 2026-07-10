@@ -24,9 +24,8 @@ export interface ExerciseItem {
   time?: string;
 }
 
-export interface PhoneUsageItem {
-  app: string;
-  durationMin?: number;
+export interface SleepItem {
+  hours?: number;
   time?: string;
 }
 
@@ -40,6 +39,6 @@ export interface ParsedDay {
   spending: SpendingItem[];
   meals: MealItem[];
   exercises: ExerciseItem[];
-  phoneUsage: PhoneUsageItem[];
+  sleep: SleepItem[];
   schedule: ScheduleItem[];
 }

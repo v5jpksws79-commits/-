@@ -2,8 +2,8 @@ import type {
   ExerciseItem,
   MealItem,
   ParsedDay,
-  PhoneUsageItem,
   ScheduleItem,
+  SleepItem,
   SpendingItem,
 } from './types';
 
@@ -33,11 +33,18 @@ function extractKcal(payload: string): number | undefined {
   return Number(match[1].replace(/,/g, ''));
 }
 
+function extractSleepHours(payload: string): number | undefined {
+  const match = payload.match(/([0-9]+(?:\.[0-9]+)?)\s*時間(?:\s*([0-9]+)\s*分)?/);
+  if (!match) return undefined;
+  const hours = Number(match[1]) + (match[2] ? Number(match[2]) / 60 : 0);
+  return Math.round(hours * 10) / 10;
+}
+
 export function parseDiaryText(text: string): ParsedDay {
   const spending: SpendingItem[] = [];
   const meals: MealItem[] = [];
   const exercises: ExerciseItem[] = [];
-  const phoneUsage: PhoneUsageItem[] = [];
+  const sleep: SleepItem[] = [];
   const schedule: ScheduleItem[] = [];
 
   const lines = text.split('\n');
@@ -93,10 +100,9 @@ export function parseDiaryText(text: string): ParsedDay {
       exercises.push({ type: rest, durationMin, time: timeMatch?.[1] });
     }
 
-    if (line.includes('#スマホ')) {
-      const payload = extractPayload(line, '#スマホ');
-      const { durationMin, rest } = extractDuration(payload);
-      phoneUsage.push({ app: rest, durationMin, time: timeMatch?.[1] });
+    if (line.includes('#睡眠')) {
+      const payload = extractPayload(line, '#睡眠');
+      sleep.push({ hours: extractSleepHours(payload), time: timeMatch?.[1] });
     }
 
     if (line.includes('#予定')) {
@@ -109,5 +115,5 @@ export function parseDiaryText(text: string): ParsedDay {
     }
   }
 
-  return { spending, meals, exercises, phoneUsage, schedule };
+  return { spending, meals, exercises, sleep, schedule };
 }

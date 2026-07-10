@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { buildDailyStats, sum } from '../lib/aggregate';
+import { average, buildDailyStats, sum } from '../lib/aggregate';
 import type { DiaryEntry } from '../lib/types';
 import { BarChart } from './BarChart';
 import { StatTile } from './StatTile';
@@ -36,9 +36,9 @@ export function StatsView({ entries }: Props) {
       <div className="stat-tiles">
         <StatTile label="支出合計" value={`${sum(stats.spending).toLocaleString()}円`} colorVar="--series-1" />
         <StatTile label="運動合計" value={`${sum(stats.exerciseMin).toLocaleString()}分`} colorVar="--series-2" />
-        <StatTile label="スマホ利用合計" value={`${sum(stats.phoneMin).toLocaleString()}分`} colorVar="--series-8" />
+        <StatTile label="平均睡眠時間" value={`${average(stats.sleepHours).toFixed(1)}時間`} colorVar="--series-8" />
         <StatTile label="食事記録数" value={`${sum(stats.mealCount).toLocaleString()}件`} colorVar="--series-4" />
-        <StatTile label="摂取カロリー合計(目安)" value={`${sum(stats.calorieKcal).toLocaleString()}kcal`} colorVar="--series-3" />
+        <StatTile label="平均摂取カロリー(目安)" value={`${Math.round(average(stats.calorieKcal)).toLocaleString()}kcal`} colorVar="--series-3" />
       </div>
 
       <section className="chart-section">
@@ -52,8 +52,8 @@ export function StatsView({ entries }: Props) {
       </section>
 
       <section className="chart-section">
-        <h3>日別スマホ利用時間</h3>
-        <BarChart data={stats.phoneMin} colorVar="--series-8" unit="分" />
+        <h3>日別睡眠時間</h3>
+        <BarChart data={stats.sleepHours} colorVar="--series-8" unit="時間" />
       </section>
 
       <section className="chart-section">

@@ -50,11 +50,14 @@ describe('parseDiaryText', () => {
     ]);
   });
 
-  it('extracts phone usage with app and duration', () => {
-    const result = parseDiaryText('21:00 #スマホ YouTube 45分');
-    expect(result.phoneUsage).toEqual([
-      { app: 'YouTube', durationMin: 45, time: '21:00' },
-    ]);
+  it('extracts sleep hours', () => {
+    const result = parseDiaryText('7:00 #睡眠 7時間30分');
+    expect(result.sleep).toEqual([{ hours: 7.5, time: '7:00' }]);
+  });
+
+  it('extracts sleep hours without minutes', () => {
+    const result = parseDiaryText('#睡眠 6時間');
+    expect(result.sleep).toEqual([{ hours: 6, time: undefined }]);
   });
 
   it('extracts explicit #予定 tag with time range', () => {
@@ -71,13 +74,13 @@ describe('parseDiaryText', () => {
       '7:30 #食事 朝食 パンとコーヒー',
       '12:30 #支出 800円 ランチ',
       '19:00 #運動 ランニング 30分',
-      '21:00 #スマホ YouTube 45分',
+      '23:00 #睡眠 7時間',
     ].join('\n');
     const result = parseDiaryText(text);
     expect(result.schedule).toHaveLength(1);
     expect(result.meals).toHaveLength(1);
     expect(result.spending).toHaveLength(1);
     expect(result.exercises).toHaveLength(1);
-    expect(result.phoneUsage).toHaveLength(1);
+    expect(result.sleep).toHaveLength(1);
   });
 });

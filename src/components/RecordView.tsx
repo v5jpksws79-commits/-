@@ -61,7 +61,7 @@ export function RecordView({ entries, onSave }: Props) {
 
       <textarea
         className="diary-textarea"
-        placeholder={'今日の出来事を自由に書いてください。\n例:\n7:00 起床\n7:30 #食事 朝食 パンとコーヒー\n12:30 #支出 800円 ランチ\n19:00 #運動 ランニング 30分\n21:00 #スマホ YouTube 45分'}
+        placeholder={'今日の出来事を自由に書いてください。\n例:\n7:00 起床\n7:00 #睡眠 7時間30分\n7:30 #食事 朝食 パンとコーヒー\n12:30 #支出 800円 ランチ\n19:00 #運動 ランニング 30分'}
         value={text}
         onChange={(e) => handleChange(e.target.value)}
         rows={14}
